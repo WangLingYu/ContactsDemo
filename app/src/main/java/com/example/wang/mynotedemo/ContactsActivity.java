@@ -34,7 +34,8 @@ public class ContactsActivity extends AppCompatActivity {
             person.setPerson_portrait("2016-8-30");
             mPersons.add(person);
         }
-        MyRecyclerAdapter myRecyclerAdapter = new MyRecyclerAdapter(mPersons,this);
+        MyRecyclerAdapter myRecyclerAdapter = new MyRecyclerAdapter(mPersons, this);
+
         contactsListView.setLayoutManager(new LinearLayoutManager(this));
         contactsListView.setAdapter(myRecyclerAdapter);
     }

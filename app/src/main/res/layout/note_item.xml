@@ -6,8 +6,8 @@
     android:layout_marginTop="10dp"
     card_view:cardBackgroundColor="@color/colorPrimary"
     card_view:cardCornerRadius="10dp"
-    card_view:cardElevation="3dp"
-    card_view:cardMaxElevation="5dp"
+    card_view:cardElevation="10dp"
+    card_view:cardMaxElevation="10dp"
     card_view:contentPadding="10dp">
 
     <TextView
