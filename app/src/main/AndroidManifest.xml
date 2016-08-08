@@ -32,10 +32,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ContactsActivity"
-            android:exported="true"
-            android:label="@string/title_activity_note"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
