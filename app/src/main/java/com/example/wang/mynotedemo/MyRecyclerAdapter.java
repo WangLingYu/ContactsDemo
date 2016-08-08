@@ -36,7 +36,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.personName.setText(mPersons.get(position).getPerson_title());
         holder.personPhone.setText(mPersons.get(position).getPerson_content());
-        holder.personPortrait.setBackground(ContextCompat.getDrawable(mContext, R.drawable.i1));
     }
 
 
