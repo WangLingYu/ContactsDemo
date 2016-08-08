@@ -22,7 +22,9 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView
+        android:padding="10dp"
         android:id="@+id/note_recycler_view"
+        android:layout_marginTop="56dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </android.support.design.widget.CoordinatorLayout>

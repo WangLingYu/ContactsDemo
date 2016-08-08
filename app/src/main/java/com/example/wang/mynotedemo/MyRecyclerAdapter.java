@@ -1,9 +1,11 @@
 package com.example.wang.mynotedemo;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -27,26 +29,26 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.noteTitle.setText(mPersons.get(position).getNote_title());
-        holder.noteContent.setText(mPersons.get(position).getNote_content());
-        holder.noteCreateTime.setText(mPersons.get(position).getNote_create_time());
-
+        holder.personName.setText(mPersons.get(position).getPerson_title());
+        holder.personPhone.setText(mPersons.get(position).getPerson_content());
     }
 
 
     @Override
     public int getItemCount() {
+        Log.d("MyRecyclerAdapter", "" + mPersons.size());
         return mPersons.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView noteTitle, noteContent, noteCreateTime;
+        TextView personName, personPhone;
+        ImageView personPortrait;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            noteTitle = (TextView) itemView.findViewById(R.id.note_title);
-            noteContent = (TextView) itemView.findViewById(R.id.note_content);
-            noteCreateTime = (TextView) itemView.findViewById(R.id.note_create_time);
+            personName = (TextView) itemView.findViewById(R.id.person_title);
+            personPhone = (TextView) itemView.findViewById(R.id.person_content);
+            personPortrait = (ImageView) itemView.findViewById(R.id.person_portrait);
         }
     }
 

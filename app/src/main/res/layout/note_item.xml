@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="60dp"
+    android:layout_marginTop="20dp"
+    card_view:cardBackgroundColor="@color/colorPrimary"
+    card_view:cardCornerRadius="5dp"
+    card_view:cardElevation="3dp"
+    card_view:cardMaxElevation="5dp">
 
     <TextView
-        android:id="@+id/note_title"
+        android:id="@+id/person_title"
+        android:layout_marginLeft="60dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="标题"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp" />
+        android:hint="标题" />
 
     <TextView
-        android:id="@+id/note_content"
+        android:id="@+id/person_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="笔记内容"
-        android:layout_marginTop="21dp"
-        android:layout_below="@+id/note_title"
-        android:layout_alignStart="@+id/note_title" />
+        android:layout_marginLeft="60dp"
+        android:layout_below="@+id/person_title"
+        android:layout_marginTop="30dp"
+        android:hint="笔记内容" />
 
-    <TextView
-        android:id="@+id/note_create_time"
+    <ImageView
+        android:id="@+id/person_portrait"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="笔记创建时间"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="10dp" />
-</RelativeLayout>
+        android:layout_height="match_parent"
+        android:background="@mipmap/ic_launcher"
+        android:hint="笔记创建时间" />
+</android.support.v7.widget.CardView>

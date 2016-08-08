@@ -29,9 +29,9 @@ public class ContactsActivity extends AppCompatActivity {
         mPersons = new ArrayList<>();
         for (int i = 0; i < 25; i++) {
             Person person = new Person();
-            person.setNote_title("通讯录标题");
-            person.setNote_content("通讯录内容");
-            person.setNote_create_time("2016-8-30");
+            person.setPerson_title("联系人姓名");
+            person.setPerson_content("联系人电话");
+            person.setPerson_portrait("2016-8-30");
             mPersons.add(person);
         }
         MyRecyclerAdapter myRecyclerAdapter = new MyRecyclerAdapter(mPersons);
