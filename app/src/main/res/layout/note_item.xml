@@ -2,33 +2,35 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:layout_marginTop="20dp"
+    android:layout_height="100dp"
+    android:layout_marginTop="10dp"
     card_view:cardBackgroundColor="@color/colorPrimary"
-    card_view:cardCornerRadius="5dp"
+    card_view:cardCornerRadius="10dp"
     card_view:cardElevation="3dp"
-    card_view:cardMaxElevation="5dp">
+    card_view:cardMaxElevation="5dp"
+    card_view:contentPadding="10dp">
 
     <TextView
         android:id="@+id/person_title"
-        android:layout_marginLeft="60dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="标题" />
+        android:layout_marginLeft="90dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/person_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
         android:layout_below="@+id/person_title"
-        android:layout_marginTop="30dp"
-        android:hint="笔记内容" />
+        android:layout_marginLeft="90dp"
+        android:layout_marginTop="50dp"
+        android:textSize="20sp" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/person_portrait"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:background="@mipmap/ic_launcher"
-        android:hint="笔记创建时间" />
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/i1" />
 </android.support.v7.widget.CardView>

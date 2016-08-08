@@ -29,12 +29,12 @@ public class ContactsActivity extends AppCompatActivity {
         mPersons = new ArrayList<>();
         for (int i = 0; i < 25; i++) {
             Person person = new Person();
-            person.setPerson_title("联系人姓名");
-            person.setPerson_content("联系人电话");
+            person.setPerson_title("王苓宇");
+            person.setPerson_content("18383038628");
             person.setPerson_portrait("2016-8-30");
             mPersons.add(person);
         }
-        MyRecyclerAdapter myRecyclerAdapter = new MyRecyclerAdapter(mPersons);
+        MyRecyclerAdapter myRecyclerAdapter = new MyRecyclerAdapter(mPersons,this);
         contactsListView.setLayoutManager(new LinearLayoutManager(this));
         contactsListView.setAdapter(myRecyclerAdapter);
     }
