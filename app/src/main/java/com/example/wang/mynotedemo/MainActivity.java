@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void hideFloatingActionMenu() {
         ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(floatingActionMenu, "translationY", 0, 350);
-        objectAnimator.setDuration(500);//如果AnimatorSet设置了该属性则是Set的值为准
+        objectAnimator.setDuration(500);
         objectAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         if (!isFloatingMenuHide) {
             objectAnimator.start();
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void showFloatingActionMenu() {
         ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(floatingActionMenu, "translationY", 350, 0);
-        objectAnimator.setDuration(500);//如果AnimatorSet设置了该属性则是Set的值为准
+        objectAnimator.setDuration(500);
         objectAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         if (isFloatingMenuHide) {
             objectAnimator.start();
