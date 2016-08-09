@@ -58,11 +58,8 @@ public class MainActivity extends AppCompatActivity {
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                boolean isSignificantDelta = false;
+
                 if (Math.abs(scrollY - oldScrollY) > 10) {
-                    isSignificantDelta = true;
-                }
-                if (isSignificantDelta) {
                     if ((scrollY - oldScrollY) > 0) {
                         onScrollUp();
                         isFloatingMenuHide = true;
@@ -71,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
                         isFloatingMenuHide = false;
                     }
                 }
-
             }
         });
     }
