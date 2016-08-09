@@ -6,6 +6,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
         contactsListView = (ScrollableRecyclerView) findViewById(R.id.note_recycler_view);
         nestedScrollView = (NestedScrollView) findViewById(R.id.nested_scroll_view);
+        assert nestedScrollView != null;
 
         floatingActionMenu = (FloatingActionMenu) findViewById(R.id.menu_green);
         f1 = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.f1);
@@ -63,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MyRecyclerAdapter myRecyclerAdapter = new MyRecyclerAdapter(mPersons, this);
         contactsListView.setLayoutManager(new LinearLayoutManager(this));
         contactsListView.setAdapter(myRecyclerAdapter);
+
         nestedScrollView.setOnScrollChangeListener(
                 new NestedScrollView.OnScrollChangeListener() {
                     @Override

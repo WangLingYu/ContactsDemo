@@ -312,6 +312,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         @Override
+        protected void onPreExecute() {
+            showProgress(true);
+        }
+
+        @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
@@ -325,7 +330,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (mUser.equals("wangchen") && mPassword.equals("123456")) {
                 return true;
             }
-            return false;
+            return true;
         }
 
         @Override
@@ -336,6 +341,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (success) {
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

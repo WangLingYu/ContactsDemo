@@ -67,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="220dp"
-        android:layout_marginTop="290dp"
+        android:layout_marginTop="285dp"
         app:menu_fab_size="normal"
         app:menu_showShadow="true"
         fab:menu_animationDelayPerItem="0"
