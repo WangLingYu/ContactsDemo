@@ -31,17 +31,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initData();
         initView();
 
     }
 
-    private void initView() {
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
-        contactsListView = (ScrollableRecyclerView) findViewById(R.id.note_recycler_view);
-        nestedScrollView = (NestedScrollView) findViewById(R.id.nested_scroll_view);
-
-        floatingActionMenu = (FloatingActionMenu) findViewById(R.id.menu_yellow);
+    private void initData() {
         mPersons = new ArrayList<>();
         for (int i = 0; i < 25; i++) {
             Person person = new Person();
@@ -50,30 +45,41 @@ public class MainActivity extends AppCompatActivity {
             person.setPerson_portrait("2016-8-30");
             mPersons.add(person);
         }
+    }
+
+    private void initView() {
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+        contactsListView = (ScrollableRecyclerView) findViewById(R.id.note_recycler_view);
+        nestedScrollView = (NestedScrollView) findViewById(R.id.nested_scroll_view);
+
+        floatingActionMenu = (FloatingActionMenu) findViewById(R.id.menu_green);
         MyRecyclerAdapter myRecyclerAdapter = new MyRecyclerAdapter(mPersons, this);
 
         contactsListView.setLayoutManager(new LinearLayoutManager(this));
         contactsListView.setAdapter(myRecyclerAdapter);
-
-        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
-                if (Math.abs(scrollY - oldScrollY) > 10) {
-                    if ((scrollY - oldScrollY) > 0) {
-                        onScrollUp();
-                        isFloatingMenuHide = true;
-                    } else {
-                        onScrollDown();
-                        isFloatingMenuHide = false;
+        nestedScrollView.setOnScrollChangeListener(
+                new NestedScrollView.OnScrollChangeListener() {
+                    @Override
+                    public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                        if (!floatingActionMenu.isOpened()) {
+                            if (Math.abs(scrollY - oldScrollY) > 1) {
+                                if ((scrollY - oldScrollY) > 0) {
+                                    onScrollUp();
+                                    isFloatingMenuHide = true;
+                                } else {
+                                    onScrollDown();
+                                    isFloatingMenuHide = false;
+                                }
+                            }
+                        }
                     }
                 }
-            }
-        });
+        );
     }
 
     private void hideFloatingActionMenu() {
-        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(floatingActionMenu, "translationY", 0, 300);
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(floatingActionMenu, "translationY", 0, 350);
         objectAnimator.setDuration(500);//如果AnimatorSet设置了该属性则是Set的值为准
         objectAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         if (!isFloatingMenuHide) {
@@ -82,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showFloatingActionMenu() {
-        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(floatingActionMenu, "translationY", 300, 0);
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(floatingActionMenu, "translationY", 350, 0);
         objectAnimator.setDuration(500);//如果AnimatorSet设置了该属性则是Set的值为准
         objectAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         if (isFloatingMenuHide) {
