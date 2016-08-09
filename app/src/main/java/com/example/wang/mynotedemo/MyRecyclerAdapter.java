@@ -41,7 +41,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
     @Override
     public int getItemCount() {
-        Log.d("MyRecyclerAdapter", "" + mPersons.size());
         return mPersons.size();
     }
 
