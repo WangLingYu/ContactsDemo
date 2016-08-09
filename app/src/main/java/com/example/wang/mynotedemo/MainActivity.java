@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void hideFloatingActionMenu() {
-        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(floatingActionMenu, "translationX", 0, 500);
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(floatingActionMenu, "translationY", 0, 300);
         objectAnimator.setDuration(500);//如果AnimatorSet设置了该属性则是Set的值为准
         objectAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         if (!isFloatingMenuHide) {
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showFloatingActionMenu() {
-        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(floatingActionMenu, "translationX", 500, 0);
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(floatingActionMenu, "translationY", 300, 0);
         objectAnimator.setDuration(500);//如果AnimatorSet设置了该属性则是Set的值为准
         objectAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         if (isFloatingMenuHide) {
