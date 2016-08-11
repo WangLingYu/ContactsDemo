@@ -1,4 +1,4 @@
-package com.example.wang.mynotedemo;
+package com.example.wang.mynotedemo.customview;
 
 import android.content.Context;
 import android.support.annotation.Nullable;

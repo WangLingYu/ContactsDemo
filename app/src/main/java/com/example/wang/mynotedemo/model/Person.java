@@ -1,4 +1,4 @@
-package com.example.wang.mynotedemo;
+package com.example.wang.mynotedemo.model;
 
 /**
  * Created by wang on 16/8/8.

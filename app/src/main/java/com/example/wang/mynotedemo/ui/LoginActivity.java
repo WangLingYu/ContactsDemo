@@ -1,4 +1,4 @@
-package com.example.wang.mynotedemo;
+package com.example.wang.mynotedemo.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -30,6 +30,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.wang.mynotedemo.R;
 
 import java.util.ArrayList;
 import java.util.List;

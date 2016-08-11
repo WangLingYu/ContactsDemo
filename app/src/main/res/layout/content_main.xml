@@ -8,7 +8,7 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.wang.mynotedemo.MainActivity"
+    tools:context=".ui.MainActivity"
     tools:showIn="@layout/activity_main">
 
     <RelativeLayout
@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.example.wang.mynotedemo.ScrollableRecyclerView
+        <com.example.wang.mynotedemo.customview.ScrollableRecyclerView
             android:id="@+id/note_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

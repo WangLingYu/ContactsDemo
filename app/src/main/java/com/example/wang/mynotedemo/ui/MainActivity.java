@@ -1,22 +1,38 @@
-package com.example.wang.mynotedemo;
+package com.example.wang.mynotedemo.ui;
 
 import android.animation.ObjectAnimator;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Toast;
 
+import com.example.wang.mynotedemo.MyRecyclerAdapter;
+import com.example.wang.mynotedemo.api.Api;
+import com.example.wang.mynotedemo.model.Person;
+import com.example.wang.mynotedemo.R;
+import com.example.wang.mynotedemo.customview.ScrollableRecyclerView;
 import com.github.clans.fab.FloatingActionMenu;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -25,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     FloatingActionMenu floatingActionMenu;
     com.github.clans.fab.FloatingActionButton f1, f2, f3;
     NestedScrollView nestedScrollView;
+    SearchView mSearchView;
     boolean isFloatingMenuHide = false;
 
     @Override
@@ -99,6 +116,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
         );
+
+        final int editViewId = getResources().getIdentifier("search_src_text", "id", getPackageName());
+        mSearchView = (SearchView) findViewById(R.id.search_view);
+        SearchView.SearchAutoComplete mEdit = (SearchView.SearchAutoComplete) mSearchView.findViewById(editViewId);
+        if (mEdit != null) {
+            mEdit.setHintTextColor(0xFF000000);
+            mEdit.setTextColor(0xFF000000);
+            mEdit.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            mEdit.setHint("输入进行搜索");
+        }
+        assert mSearchView != null;
+        mSearchView.setIconified(false);
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(MainActivity.this, "提交完毕", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Toast.makeText(MainActivity.this, "正在改变", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
     }
 
     private void hideFloatingActionMenu() {
@@ -133,8 +175,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.f1:
-                Snackbar.make(nestedScrollView, "点击了f1", Snackbar.LENGTH_SHORT).show();
                 floatingActionMenu.toggle(true);
+                Retrofit retrofit = new Retrofit.Builder()
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .baseUrl("http://127.0.0.1:5000/")
+                        .build();
+                Api api = retrofit.create(Api.class);
+
+                Call<String> call = api.getPersons();
+
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        Log.d("MainActivity", "返回码为" + response.code());
+                        Log.d("MainActivity", "返回值为" + response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Log.d("MainActivity", String.valueOf(t.getCause()));
+                        Log.d("MainActivity", "网络请求失败");
+                    }
+                });
                 break;
             case R.id.f2:
                 Snackbar.make(nestedScrollView, "点击了f2", Snackbar.LENGTH_SHORT).show();
