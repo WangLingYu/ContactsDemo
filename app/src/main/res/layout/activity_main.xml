@@ -60,6 +60,7 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
+
     <include layout="@layout/content_main" />
 
     <com.github.clans.fab.FloatingActionMenu
@@ -106,7 +107,7 @@
             app:fab_colorNormal="#009688"
             app:fab_colorPressed="#26a69a"
             app:fab_colorRipple="#99FFFFFF"
-            fab:fab_label="暂无" />
+            fab:fab_label="注销" />
 
     </com.github.clans.fab.FloatingActionMenu>
 
