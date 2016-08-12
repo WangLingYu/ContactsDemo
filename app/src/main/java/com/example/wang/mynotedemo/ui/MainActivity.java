@@ -1,9 +1,8 @@
 package com.example.wang.mynotedemo.ui;
 
 import android.animation.ObjectAnimator;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -16,8 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.wang.mynotedemo.MyRecyclerAdapter;
@@ -41,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ScrollableRecyclerView contactsListView;
     List<Person> mPersons;
     FloatingActionMenu floatingActionMenu;
-    com.github.clans.fab.FloatingActionButton f1, f2, f3;
+    com.github.clans.fab.FloatingActionButton search, f2, logout;
     NestedScrollView nestedScrollView;
     SearchView mSearchView;
     MyRecyclerAdapter myRecyclerAdapter;
@@ -88,17 +85,55 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         assert nestedScrollView != null;
 
         floatingActionMenu = (FloatingActionMenu) findViewById(R.id.menu_green);
-        f1 = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.f1);
+        search = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.search);
         f2 = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.f2);
-        f3 = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.f3);
-        f1.setOnClickListener(this);
+        logout = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.logout);
+        search.setOnClickListener(this);
         f2.setOnClickListener(this);
-        f3.setOnClickListener(this);
+        logout.setOnClickListener(this);
 
         myRecyclerAdapter = new MyRecyclerAdapter(mPersons, this);
         Log.d("MainActivity", "initView中mPersons的长度为" + mPersons.size());
         contactsListView.setLayoutManager(new LinearLayoutManager(this));
         contactsListView.setAdapter(myRecyclerAdapter);
+
+        initSearchView();
+        setViewListener();
+    }
+
+    private void initSearchView() {
+        mSearchView = (SearchView) findViewById(R.id.search_view);
+        final int editViewId = getResources().getIdentifier("search_src_text", "id", getPackageName());
+
+        SearchView.SearchAutoComplete mEdit = (SearchView.SearchAutoComplete) mSearchView.findViewById(editViewId);
+        if (mEdit != null) {
+            mEdit.setHintTextColor(0xFF000000);
+            mEdit.setTextColor(0xFF000000);
+            mEdit.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            mEdit.setHint("输入进行搜索");
+        }
+        assert mSearchView != null;
+        mSearchView.setIconified(false);
+
+    }
+
+    private void setViewListener() {
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(MainActivity.this, "提交完毕", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                List<Person> filteredModelList = filter(mPersons, newText);
+                Log.d("MainActivity", String.valueOf(filteredModelList.size()));
+                myRecyclerAdapter.animateTo(filteredModelList);
+                contactsListView.scrollToPosition(0);
+                return true;
+            }
+        });
 
         nestedScrollView.setOnScrollChangeListener(
                 new NestedScrollView.OnScrollChangeListener() {
@@ -118,40 +153,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
         );
-
-        initSearchView();
-
-    }
-
-    private void initSearchView() {
-        mSearchView = (SearchView) findViewById(R.id.search_view);
-        final int editViewId = getResources().getIdentifier("search_src_text", "id", getPackageName());
-
-        SearchView.SearchAutoComplete mEdit = (SearchView.SearchAutoComplete) mSearchView.findViewById(editViewId);
-        if (mEdit != null) {
-            mEdit.setHintTextColor(0xFF000000);
-            mEdit.setTextColor(0xFF000000);
-            mEdit.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-            mEdit.setHint("输入进行搜索");
-        }
-        assert mSearchView != null;
-        mSearchView.setIconified(false);
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(MainActivity.this, "提交完毕", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                List<Person> filteredModelList = filter(mPersons, newText);
-                Log.d("MainActivity", String.valueOf(filteredModelList.size()));
-                myRecyclerAdapter.animateTo(filteredModelList);
-                contactsListView.scrollToPosition(0);
-                return true;
-            }
-        });
     }
 
     private void hideFloatingActionMenu() {
@@ -200,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.f1:
+            case R.id.search:
                 floatingActionMenu.toggle(true);
                 Retrofit retrofit = new Retrofit.Builder()
                         .addConverterFactory(GsonConverterFactory.create())
@@ -228,8 +229,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Snackbar.make(nestedScrollView, "点击了f2", Snackbar.LENGTH_SHORT).show();
                 floatingActionMenu.toggle(true);
                 break;
-            case R.id.f3:
-                Snackbar.make(nestedScrollView, "点击了f3", Snackbar.LENGTH_SHORT).show();
+            case R.id.logout:
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
                 floatingActionMenu.toggle(true);
                 break;
         }

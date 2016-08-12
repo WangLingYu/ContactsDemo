@@ -80,7 +80,7 @@
         fab:menu_shadowColor="#444">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/f1"
+            android:id="@+id/search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_visibility_black_24dp"
@@ -100,7 +100,7 @@
             fab:fab_label="添加" />
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/f3"
+            android:id="@+id/logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_flight_takeoff_black_24dp"
