@@ -4,8 +4,8 @@ package com.example.wang.mynotedemo.model;
  * Created by wang on 16/8/8.
  */
 public class Person {
-    String person_title;
-    String person_content;
+    String person_phone;
+    String person_name;
     String person_portrait;
 
     public String getPerson_portrait() {
@@ -16,19 +16,19 @@ public class Person {
         this.person_portrait = person_portrait;
     }
 
-    public String getPerson_content() {
-        return person_content;
+    public String getPerson_name() {
+        return person_name;
     }
 
-    public void setPerson_content(String person_content) {
-        this.person_content = person_content;
+    public void setPerson_name(String person_name) {
+        this.person_name = person_name;
     }
 
-    public String getPerson_title() {
-        return person_title;
+    public String getPerson_phone() {
+        return person_phone;
     }
 
-    public void setPerson_title(String person_title) {
-        this.person_title = person_title;
+    public void setPerson_phone(String person_phone) {
+        this.person_phone = person_phone;
     }
 }

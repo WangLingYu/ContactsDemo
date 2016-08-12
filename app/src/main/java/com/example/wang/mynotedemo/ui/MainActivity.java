@@ -1,8 +1,9 @@
 package com.example.wang.mynotedemo.ui;
 
 import android.animation.ObjectAnimator;
-import android.graphics.Color;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.wang.mynotedemo.MyRecyclerAdapter;
@@ -24,7 +27,6 @@ import com.example.wang.mynotedemo.R;
 import com.example.wang.mynotedemo.customview.ScrollableRecyclerView;
 import com.github.clans.fab.FloatingActionMenu;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,16 +44,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     com.github.clans.fab.FloatingActionButton f1, f2, f3;
     NestedScrollView nestedScrollView;
     SearchView mSearchView;
+    MyRecyclerAdapter myRecyclerAdapter;
     boolean isFloatingMenuHide = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         initData();
         initView();
-
     }
 
     @Override
@@ -62,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
     }
@@ -71,15 +71,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mPersons = new ArrayList<>();
         for (int i = 0; i < 25; i++) {
             Person person = new Person();
-            person.setPerson_title("王苓宇");
-            person.setPerson_content("18383038628");
-            person.setPerson_portrait("2016-8-30");
+            person.setPerson_phone("王苓宇" + i);
+            person.setPerson_name("18383038628" + i);
+            person.setPerson_portrait("2016-8-30" + i);
             mPersons.add(person);
         }
+        Log.d("MainActivity", "initData中mPersons的长度为" + mPersons.size());
     }
 
-
     private void initView() {
+
         final Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         contactsListView = (ScrollableRecyclerView) findViewById(R.id.note_recycler_view);
@@ -94,7 +95,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         f2.setOnClickListener(this);
         f3.setOnClickListener(this);
 
-        MyRecyclerAdapter myRecyclerAdapter = new MyRecyclerAdapter(mPersons, this);
+        myRecyclerAdapter = new MyRecyclerAdapter(mPersons, this);
+        Log.d("MainActivity", "initView中mPersons的长度为" + mPersons.size());
         contactsListView.setLayoutManager(new LinearLayoutManager(this));
         contactsListView.setAdapter(myRecyclerAdapter);
 
@@ -117,8 +119,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
         );
 
-        final int editViewId = getResources().getIdentifier("search_src_text", "id", getPackageName());
+        initSearchView();
+
+    }
+
+    private void initSearchView() {
         mSearchView = (SearchView) findViewById(R.id.search_view);
+        final int editViewId = getResources().getIdentifier("search_src_text", "id", getPackageName());
+
         SearchView.SearchAutoComplete mEdit = (SearchView.SearchAutoComplete) mSearchView.findViewById(editViewId);
         if (mEdit != null) {
             mEdit.setHintTextColor(0xFF000000);
@@ -137,7 +145,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Toast.makeText(MainActivity.this, "正在改变", Toast.LENGTH_SHORT).show();
+                List<Person> filteredModelList = filter(mPersons, newText);
+                Log.d("MainActivity", String.valueOf(filteredModelList.size()));
+                myRecyclerAdapter.animateTo(filteredModelList);
+                contactsListView.scrollToPosition(0);
                 return true;
             }
         });
@@ -159,6 +170,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (isFloatingMenuHide) {
             objectAnimator.start();
         }
+    }
+
+    //SearchView的过滤
+    private List<Person> filter(List<Person> models, String query) {
+        query = query.toLowerCase();
+        Log.d("MainActivity", "query值为" + query);
+        Log.d("MainActivity", "filter中mPersons的长度为" + mPersons.size());
+        List<Person> filteredModelList = new ArrayList<>();
+        for (Person person : models) {
+            final String text = person.getPerson_phone().toLowerCase();
+            if (text.contains(query)) {
+                filteredModelList.add(person);
+            }
+        }
+        return filteredModelList;
     }
 
     private void onScrollUp() {
