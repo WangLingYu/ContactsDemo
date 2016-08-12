@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             person.setPerson_portrait("2016-8-30" + i);
             mPersons.add(person);
         }
-        Log.d("MainActivity", "initData中mPersons的长度为" + mPersons.size());
     }
 
     private void initView() {
@@ -93,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         logout.setOnClickListener(this);
 
         myRecyclerAdapter = new MyRecyclerAdapter(mPersons, this);
-        Log.d("MainActivity", "initView中mPersons的长度为" + mPersons.size());
         contactsListView.setLayoutManager(new LinearLayoutManager(this));
         contactsListView.setAdapter(myRecyclerAdapter);
 
@@ -176,8 +174,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //SearchView的过滤
     private List<Person> filter(List<Person> models, String query) {
         query = query.toLowerCase();
-        Log.d("MainActivity", "query值为" + query);
-        Log.d("MainActivity", "filter中mPersons的长度为" + mPersons.size());
         List<Person> filteredModelList = new ArrayList<>();
         for (Person person : models) {
             final String text = person.getPerson_phone().toLowerCase();
@@ -205,22 +201,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 floatingActionMenu.toggle(true);
                 Retrofit retrofit = new Retrofit.Builder()
                         .addConverterFactory(GsonConverterFactory.create())
-                        .baseUrl("http://127.0.0.1:5000/")
+                        .baseUrl("http://192.168.1.100:5000/")
                         .build();
                 Api api = retrofit.create(Api.class);
 
-                Call<String> call = api.getPersons();
+                Call<Person> call = api.repo();
 
-                call.enqueue(new Callback<String>() {
+                call.enqueue(new Callback<Person>() {
                     @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        Log.d("MainActivity", "返回码为" + response.code());
-                        Log.d("MainActivity", "返回值为" + response.body());
+                    public void onResponse(Call<Person> call, Response<Person> response) {
+
                     }
 
                     @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        Log.d("MainActivity", String.valueOf(t.getCause()));
+                    public void onFailure(Call<Person> call, Throwable t) {
                         Log.d("MainActivity", "网络请求失败");
                     }
                 });
