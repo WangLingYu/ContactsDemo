@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,9 +33,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.wang.mynotedemo.R;
+import com.example.wang.mynotedemo.api.Api;
+import com.example.wang.mynotedemo.model.LoginResult;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -58,7 +67,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mUserView;
@@ -153,9 +161,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
 
         // Reset errors.
         mUserView.setError(null);
@@ -194,8 +199,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            login(email, password);
         }
     }
 
@@ -303,56 +307,47 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    private void login(String account, String password) {
+        showProgress(true);
+        LoginRequest loginRequest = new LoginRequest(account, password);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.100:5000/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        Api api = retrofit.create(Api.class);
 
-        private final String mUser;
-        private final String mPassword;
+        Call<LoginResult> call = api.login(loginRequest);
 
-        UserLoginTask(String user, String password) {
-            mUser = user;
-            mPassword = password;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            showProgress(true);
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mUser)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
+        call.enqueue(new Callback<LoginResult>() {
+            @Override
+            public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
+                Log.d("onResponse", String.valueOf(response.code()));
+                Log.d("onResponse", response.body().getStatus());
+                showProgress(false);
+                if (response.body().getStatus().equals("success")) {
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    finish();
+                } else {
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    mPasswordView.requestFocus();
                 }
             }
-            if (mUser.equals("wangchen") && mPassword.equals("123456")) {
-                return true;
-            }
-            return true;
-        }
 
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-            if (success) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+            @Override
+            public void onFailure(Call<LoginResult> call, Throwable t) {
+                Log.d("onResponse", "网络请求失败");
             }
-        }
+        });
+    }
 
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
+    public class LoginRequest {
+        String account;
+        String password;
+
+        public LoginRequest(String account, String password) {
+            this.account = account;
+            this.password = password;
         }
     }
 }

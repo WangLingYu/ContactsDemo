@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initData();
-        initView();
+
     }
 
     @Override
@@ -65,14 +65,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initData() {
-        mPersons = new ArrayList<>();
-        for (int i = 0; i < 25; i++) {
-            Person person = new Person();
-            person.setPerson_phone("王苓宇" + i);
-            person.setPerson_name("18383038628" + i);
-            person.setPerson_portrait("2016-8-30" + i);
-            mPersons.add(person);
-        }
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("http://192.168.1.100:5000/")
+                .build();
+        Api api = retrofit.create(Api.class);
+
+        Call<List<Person>> call = api.getContacts("1");
+
+        call.enqueue(new Callback<List<Person>>() {
+            @Override
+            public void onResponse(Call<List<Person>> call, Response<List<Person>> response) {
+
+                Log.d("onResponse", String.valueOf(response.code()));
+                if (response.code() == 200) {
+                    Log.d("onResponse", String.valueOf(response.body().size()));
+                    mPersons = response.body();
+                    Log.d("onResponse", String.valueOf(mPersons.size()));
+                    initView();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Person>> call, Throwable t) {
+                Log.d("MainActivity", "网络请求失败");
+            }
+        });
     }
 
     private void initView() {
@@ -199,25 +217,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.search:
                 floatingActionMenu.toggle(true);
-                Retrofit retrofit = new Retrofit.Builder()
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .baseUrl("http://192.168.1.100:5000/")
-                        .build();
-                Api api = retrofit.create(Api.class);
 
-                Call<Person> call = api.repo();
-
-                call.enqueue(new Callback<Person>() {
-                    @Override
-                    public void onResponse(Call<Person> call, Response<Person> response) {
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<Person> call, Throwable t) {
-                        Log.d("MainActivity", "网络请求失败");
-                    }
-                });
                 break;
             case R.id.f2:
                 Snackbar.make(nestedScrollView, "点击了f2", Snackbar.LENGTH_SHORT).show();
