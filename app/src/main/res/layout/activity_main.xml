@@ -87,7 +87,7 @@
             app:fab_colorNormal="#DA4336"
             app:fab_colorPressed="#E75043"
             app:fab_colorRipple="#99FFFFFF"
-            fab:fab_label="搜索" />
+            fab:fab_label="删除联系人" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/f2"
@@ -97,7 +97,7 @@
             app:fab_colorNormal="#03a9f4"
             app:fab_colorPressed="#0288d1"
             app:fab_colorRipple="#99FFFFFF"
-            fab:fab_label="添加" />
+            fab:fab_label="新增联系人" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/logout"

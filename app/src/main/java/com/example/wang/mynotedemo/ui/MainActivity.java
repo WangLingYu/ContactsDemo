@@ -3,7 +3,6 @@ package com.example.wang.mynotedemo.ui;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,10 +17,10 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Toast;
 
 import com.example.wang.mynotedemo.MyRecyclerAdapter;
-import com.example.wang.mynotedemo.api.Api;
-import com.example.wang.mynotedemo.model.Person;
 import com.example.wang.mynotedemo.R;
+import com.example.wang.mynotedemo.api.Api;
 import com.example.wang.mynotedemo.customview.ScrollableRecyclerView;
+import com.example.wang.mynotedemo.model.Person;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
@@ -43,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     SearchView mSearchView;
     MyRecyclerAdapter myRecyclerAdapter;
     boolean isFloatingMenuHide = false;
+    Retrofit mRetrofit;
+    Api mApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,13 +66,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initData() {
-        Retrofit retrofit = new Retrofit.Builder()
+        mRetrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl("http://192.168.1.100:5000/")
                 .build();
-        Api api = retrofit.create(Api.class);
+        mApi = mRetrofit.create(Api.class);
 
-        Call<List<Person>> call = api.getContacts("1");
+        Call<List<Person>> call = mApi.getContacts("1");
 
         call.enqueue(new Callback<List<Person>>() {
             @Override
@@ -79,9 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 Log.d("onResponse", String.valueOf(response.code()));
                 if (response.code() == 200) {
-                    Log.d("onResponse", String.valueOf(response.body().size()));
                     mPersons = response.body();
-                    Log.d("onResponse", String.valueOf(mPersons.size()));
                     initView();
                 }
             }
@@ -217,11 +216,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.search:
                 floatingActionMenu.toggle(true);
+                Person dPerson = new Person();
+                dPerson.setPerson_id("100");
+                Call<Person> call1 = mApi.deletePerson("1", dPerson);
+                call1.enqueue(new Callback<Person>() {
+                    @Override
+                    public void onResponse(Call<Person> call, Response<Person> response) {
+                        Log.d("onResponse", "删除返回状态码为:" + String.valueOf(response.code()));
+                    }
 
+                    @Override
+                    public void onFailure(Call<Person> call, Throwable t) {
+
+                    }
+                });
                 break;
             case R.id.f2:
-                Snackbar.make(nestedScrollView, "点击了f2", Snackbar.LENGTH_SHORT).show();
                 floatingActionMenu.toggle(true);
+                Person person = new Person();
+                person.setPerson_id("100");
+                person.setPerson_address("四川省啊");
+                person.setPerson_name("玩玩玩");
+                person.setPerson_phone("123");
+                person.setPerson_company_phone("123");
+                person.setPerson_home_phone("23133");
+                Call<Person> call = mApi.addPerson("1", person);
+                call.enqueue(new Callback<Person>() {
+                    @Override
+                    public void onResponse(Call<Person> call, Response<Person> response) {
+                        Log.d("onResponse", String.valueOf(response.code()));
+                    }
+
+                    @Override
+                    public void onFailure(Call<Person> call, Throwable t) {
+                        Log.d("onResponse", "网络请求失败");
+                    }
+                });
+
                 break;
             case R.id.logout:
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));

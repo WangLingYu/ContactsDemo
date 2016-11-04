@@ -21,6 +21,12 @@ public interface Api {
 
     @POST("login")
     Call<LoginResult> login(@Body LoginActivity.LoginRequest loginRequest);
+
+    @POST("{customer_id}/addPerson")
+    Call<Person> addPerson(@Path("customer_id") String customer_id, @Body Person person);
+
+    @POST("{customer_id}/deletePerson")
+    Call<Person> deletePerson(@Path("customer_id") String customer_id, @Body Person person);
 }
 
 
